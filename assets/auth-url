@@ -1,0 +1,13 @@
+https://github.com/login/oauth/authorize
+    ?client_id=78a2ba87f071c28e65bb
+    &redirect_uri=https://circleci.com/auth/github
+    &scope=repo.user email
+    &state=xO-3xb7CGJ0Ig0meqM1pqy9I7dsz...
+
+HTTP/1.1 302 Found
+Cache-Control: no-cache
+Content-Type: text/html; charset=utf-8
+Date: Wed, 07 Dec 2016 10:45:58 GMT
+Location: https://github.com/login
+            ?client_id=78a2ba87f071c28e65bb
+            &return_to=/login/oauth/authorize...

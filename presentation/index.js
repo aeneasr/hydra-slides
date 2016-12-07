@@ -1,34 +1,15 @@
 // Import React
-import React from "react";
+import React from 'react'
+import { Appear, Deck, Heading, ListItem, List, Slide, Spectacle } from 'spectacle'
+import CodeSlide from 'spectacle-code-slide'
+import preloader from 'spectacle/lib/utils/preloader'
+import createTheme from 'spectacle/lib/themes/default'
 
 // Import Spectacle Core tags
-import {
-  Appear,
-  BlockQuote,
-  Cite,
-  CodePane,
-  Deck,
-  Fill,
-  Heading,
-  Image,
-  Layout,
-  Link,
-  ListItem,
-  List,
-  Markdown,
-  Quote,
-  Slide,
-  Spectacle,
-  Text
-} from "spectacle";
-
-import CodeSlide from 'spectacle-code-slide';
 
 // Import image preloader util
-import preloader from "spectacle/lib/utils/preloader";
 
 // Import theme
-import createTheme from "spectacle/lib/themes/default";
 
 // Import custom component
 // import Interactive from "../assets/interactive";
@@ -184,6 +165,19 @@ export default class Presentation extends React.Component {
                  bgRepeat="no-repeat">
           </Slide>
 
+          <CodeSlide
+            transition={[]}
+            lang="js"
+            code={require("raw!../assets/auth-url")}
+            ranges={[
+              { loc: start(1), title: 'OAuth 2.0 Authorize Code Flow' },
+              { loc: next(1), note: 'Client id for Circle CI' },
+              { loc: next(1), note: 'Where to redirect after success / failure' },
+              { loc: next(1), note: 'Request access to the user\'s email and all of his repositories' },
+              { loc: next(1), note: 'Anti-CSRF & -replay token' },
+              { loc: next(3, 5), note: 'User is not logged in, redirect' },
+            ]}/>
+
           <Slide transition={["fade"]} bgImage={images.example[2]}
                  bgSize="contain"
                  bgRepeat="no-repeat" bgDarken={0.85}>
@@ -202,7 +196,7 @@ export default class Presentation extends React.Component {
                  bgRepeat="no-repeat" bgDarken={0.85}>
             <Heading size={1} fit textColor="white">
               GitHub asks the user if it is ok to give<br/>
-              Circle CI access to his data.
+              Circle CI access to his data (email, repositories).
             </Heading>
           </Slide>
 
@@ -210,6 +204,28 @@ export default class Presentation extends React.Component {
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
+
+          <CodeSlide
+            transition={[]}
+            lang="js"
+            code={require("raw!../assets/callback-url")}
+            ranges={[
+              { loc: start(0), title: 'OAuth 2.0 Token Exchange' },
+              { loc: next(1), note: 'Callback URL provided earlier' },
+              { loc: next(1), note: 'OAuth2 Authorize Code' },
+              { loc: next(1), note: 'Anti-CSRF token from earlier' },
+              { loc: next(1, 2), title: 'exchange code for tokens' },
+              { loc: next(1, 1), note: 'Circle CI client id' },
+              { loc: next(1), note: 'Circle CI client secret' },
+              { loc: next(1), note: 'Could also be refresh_token, client_credentials, ...' },
+              { loc: next(1), note: 'Authorization code from above' },
+              { loc: next(4, 2), title: 'OAuth 2.0 Token Reply' },
+              { loc: next(2, 2), note: 'Short lifetime token (here: one hour)' },
+              { loc: next(1), note: 'One time password for refreshing the access token' },
+              { loc: next(4, 2), title: 'Authorized request' },
+              { loc: next(1), note: 'Fetch the user\'s repositories' },
+              { loc: next(3, 5), note: 'This presentation!' },
+            ]}/>
 
           <Slide transition={["fade"]} bgImage={images.example[5]}
                  bgSize="contain"
@@ -264,12 +280,6 @@ export default class Presentation extends React.Component {
                  bgRepeat="no-repeat">
           </Slide>
 
-          <Slide transition={["zoom"]} bgColor="black">
-            <Heading size={1} caps fit textColor="secondary">
-              OAuth 2.0 Basics
-            </Heading>
-          </Slide>
-
           <Slide transition={[]} bgColor="black">
             <Heading size={2} fit lineHeight={1} textColor="white">
               Criticism
@@ -286,7 +296,12 @@ export default class Presentation extends React.Component {
             </Appear>
             <Appear>
               <Heading size={5} caps textColor="secondary">
-                Too difficult
+                Inconsistent implementations
+              </Heading>
+            </Appear>
+            <Appear>
+              <Heading size={5} caps textColor="secondary">
+                Difficult to implement
               </Heading>
             </Appear>
           </Slide>
@@ -318,264 +333,344 @@ export default class Presentation extends React.Component {
             </Heading>
           </Slide>
 
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              Why?
+            </Heading>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <List>
+              <ListItem textColor="white">
+                Existing solutions have hard dependencies such as .NET, node, Java, ...<br />
+              </ListItem>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Hydra cross-compiles (win, osx, linux, freebsd) to a single binary with no dependencies and is
+                  memory-safe and statically typed.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Existing OAuth 2.0 implementations usually solve authorization <em>and authentication</em>.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Hydra uses the <strong>consent flow</strong> to authenticate users through a third party.
+                </ListItem>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <List>
+              <ListItem textColor="white">
+                Existing solutions require complex configuration management, from modifying html templates to writing
+                custom plugins.
+              </ListItem>
+              <Appear>
+                <ListItem textColor="secondary">
+                  The consent flow separates concerns and <em>outsources</em> backend connectors (mysql, ldap, mongodb,
+                  ...), templates, two-factor authentication, ...
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Integrating available implementations in existing environments is difficult, because authentication is
+                  not separated.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Hydra integrates well with existing environments, but has higher complexity in greenfield projets.
+                </ListItem>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              Results
+            </Heading>
+            <List>
+              <ListItem textColor="white">
+                Prominent topic on hackernews and network security forums and very positive feedback
+              </ListItem>
+              <Appear>
+                <div>
+                  <ListItem textColor="white">
+                    2200+ GitHub stars
+                  </ListItem>
+                  <ListItem textColor="white">
+                    24 contributors, active community, 3 company adopters
+                  </ListItem>
+                  <ListItem textColor="white">
+                    ~1000 unique visitors per month
+                  </ListItem>
+                </div>
+              </Appear>
+            </List>
+          </Slide>
+
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*NOTES*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*NOTES*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Appear fid="1"><Text textColor="white">I was able to decide which repositories Circle CI will have access*/}
-              {/*to.</Text></Appear>*/}
+          {/*<Appear fid="1"><Text textColor="white">I was able to decide which repositories Circle CI will have access*/}
+          {/*to.</Text></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Appear fid="1"><Text textColor="white">Do not confuse OAuth2 with an authentication method, although it*/}
-              {/*looked like one.</Text></Appear>*/}
+          {/*<Appear fid="1"><Text textColor="white">Do not confuse OAuth2 with an authentication method, although it*/}
+          {/*looked like one.</Text></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Appear fid="1"><Text textColor="white">Using OAuth2 for authentication through a third party requires*/}
-              {/*in-depth knowledge of OAuth2.</Text></Appear>*/}
+          {/*<Appear fid="1"><Text textColor="white">Using OAuth2 for authentication through a third party requires*/}
+          {/*in-depth knowledge of OAuth2.</Text></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Authentication*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={4} textColor="white">Passport control, validating your identity</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="important">NOT OAuth2!</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Authentication*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={4} textColor="white">Passport control, validating your identity</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="important">NOT OAuth2!</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Authorization*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={4} textColor="white">Is Peter allowed to use the printer?</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="important">NOT OAuth2...?</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Authorization*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={4} textColor="white">Is Peter allowed to use the printer?</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="important">NOT OAuth2...?</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Delegation of Authorization*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={6} textColor="white">Paying with a stranger's money at a point of*/}
-              {/*sale</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="important">OAuth2!</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Delegation of Authorization*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={6} textColor="white">Paying with a stranger's money at a point of*/}
+          {/*sale</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="important">OAuth2!</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Delegation of Authentication*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={6} textColor="white">Giving your passport to your twin-brother</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="important">OpenID Connect!</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Delegation of Authentication*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={6} textColor="white">Giving your passport to your twin-brother</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="important">OpenID Connect!</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["fade"]} bgColor="black" textColor="secondary">*/}
-            {/*<List>*/}
-              {/*<Appear><ListItem>OAuth2 does not replace authentication nor authorization in your current*/}
-                {/*environment.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>OAuth2 is a framework of work flows and extends your current*/}
-                {/*environment's interoperability.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>OAuth2 makes sense when opening up APIs, otherwise it doesn't.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Due to it's nature (using opaque short living credentials), OAuth2 introduces a secure*/}
-                {/*flow for mobile clients.</ListItem></Appear>*/}
-            {/*</List>*/}
+          {/*<List>*/}
+          {/*<Appear><ListItem>OAuth2 does not replace authentication nor authorization in your current*/}
+          {/*environment.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>OAuth2 is a framework of work flows and extends your current*/}
+          {/*environment's interoperability.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>OAuth2 makes sense when opening up APIs, otherwise it doesn't.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Due to it's nature (using opaque short living credentials), OAuth2 introduces a secure*/}
+          {/*flow for mobile clients.</ListItem></Appear>*/}
+          {/*</List>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Why is OAuth2 so popular?*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Why is OAuth2 so popular?*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Peer reviewed standard by the IETF*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={6} textColor="white">*/}
-              {/*Sepcified by Google, Microsoft, Deutsche Telekom, ...*/}
-            {/*</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="important">*/}
-              {/*Ease of use, but secure!*/}
-            {/*</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Peer reviewed standard by the IETF*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={6} textColor="white">*/}
+          {/*Sepcified by Google, Microsoft, Deutsche Telekom, ...*/}
+          {/*</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="important">*/}
+          {/*Ease of use, but secure!*/}
+          {/*</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={[]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Flows for every use case*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={2} textColor="white">*/}
-              {/*Client credentials*/}
-            {/*</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="white">*/}
-              {/*Authorize code*/}
-            {/*</Heading></Appear>*/}
-            {/*<Appear><Heading size={2} textColor="white">*/}
-              {/*Implicit flow*/}
-            {/*</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Flows for every use case*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={2} textColor="white">*/}
+          {/*Client credentials*/}
+          {/*</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="white">*/}
+          {/*Authorize code*/}
+          {/*</Heading></Appear>*/}
+          {/*<Appear><Heading size={2} textColor="white">*/}
+          {/*Implicit flow*/}
+          {/*</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<CodeSlide*/}
-            {/*transition={[]}*/}
-            {/*lang="js"*/}
-            {/*code={require("raw!../assets/passport")}*/}
-            {/*ranges={[*/}
-              {/*{ loc: [0, 6], title: 'Ease of use' },*/}
-              {/*{ loc: [7, 8] }*/}
-            {/*]}/>*/}
+          {/*transition={[]}*/}
+          {/*lang="js"*/}
+          {/*code={require("raw!../assets/passport")}*/}
+          {/*ranges={[*/}
+          {/*{ loc: [0, 6], title: 'Ease of use' },*/}
+          {/*{ loc: [7, 8] }*/}
+          {/*]}/>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Let's get hacking...*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Let's get hacking...*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["fade"]} bgColor="black" textColor="white">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*... with ... Hydra?*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={6} textColor="white">Run your own OAuth2 infrastructure in minutes</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*... with ... Hydra?*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={6} textColor="white">Run your own OAuth2 infrastructure in minutes</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<List>*/}
-              {/*<Appear><ListItem>Scalable, low-latency, in memory Access Control, OAuth2, and OpenID Connect*/}
-                {/*layer.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Secure by design: Encrypt at rest and in transport.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Mitigate database penetration and leakage.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Runs on top of existing authentication and authorization.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>1700 stars, trending multiple times on hackernews, reddit, GitHub,*/}
-                {/*...</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Open Source, written in Google Go and supported by the Ludwig-Maximilians-Universität*/}
-                {/*München (placed 29th world-wide).</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Fast growing ecosystem and community.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Written and designed by me - now a part of cloud native company Ory*/}
-                {/*GmbH.</ListItem></Appear>*/}
-            {/*</List>*/}
+          {/*<List>*/}
+          {/*<Appear><ListItem>Scalable, low-latency, in memory Access Control, OAuth2, and OpenID Connect*/}
+          {/*layer.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Secure by design: Encrypt at rest and in transport.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Mitigate database penetration and leakage.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Runs on top of existing authentication and authorization.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>1700 stars, trending multiple times on hackernews, reddit, GitHub,*/}
+          {/*...</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Open Source, written in Google Go and supported by the Ludwig-Maximilians-Universität*/}
+          {/*München (placed 29th world-wide).</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Fast growing ecosystem and community.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Written and designed by me - now a part of cloud native company Ory*/}
+          {/*GmbH.</ListItem></Appear>*/}
+          {/*</List>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*It's really fast*/}
-            {/*</Heading>*/}
-            {/*<Appear><Heading size={6} textColor="white">single instance on 2013 macbook, token*/}
-              {/*validation</Heading></Appear>*/}
-            {/*<Appear><Heading size={6} textColor="white">~600 requests / sec</Heading></Appear>*/}
-            {/*<Appear><Heading size={6} textColor="white">Siege: 60% CPU time - Hydra: 30% CPU time</Heading></Appear>*/}
-            {/*<Appear><Heading size={6} textColor="white">Memory footprint: 12,3MB (~10000 active*/}
-              {/*tokens)</Heading></Appear>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*It's really fast*/}
+          {/*</Heading>*/}
+          {/*<Appear><Heading size={6} textColor="white">single instance on 2013 macbook, token*/}
+          {/*validation</Heading></Appear>*/}
+          {/*<Appear><Heading size={6} textColor="white">~600 requests / sec</Heading></Appear>*/}
+          {/*<Appear><Heading size={6} textColor="white">Siege: 60% CPU time - Hydra: 30% CPU time</Heading></Appear>*/}
+          {/*<Appear><Heading size={6} textColor="white">Memory footprint: 12,3MB (~10000 active*/}
+          {/*tokens)</Heading></Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["fade"]}>*/}
-            {/*<Image width="100%" src={images.siege}/>*/}
+          {/*<Image width="100%" src={images.siege}/>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Enough talking!*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Enough talking!*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["fade"]}>*/}
-            {/*<Image width="100%" src={images.quickstart}/>*/}
+          {/*<Image width="100%" src={images.quickstart}/>*/}
           {/*</Slide>*/}
 
           {/*<CodeSlide*/}
-            {/*transition={[]}*/}
-            {/*lang="js"*/}
-            {/*code={require("raw!../assets/install")}*/}
-            {/*ranges={[*/}
-              {/*{ loc: [0, 1], note: 'If you don\'t have git, download the zip package from github.com/ory-am/hydra' },*/}
-              {/*{ loc: [2, 3] },*/}
-              {/*{ loc: [4, 5], note: 'SYSTEM_SECRET: This is used to encrypt data at rest' },*/}
-              {/*{ loc: [4, 5], note: 'DOCKER_IP: Only required when using docker inside a VM' },*/}
-              {/*{ loc: [4, 5] },*/}
-              {/*{ loc: [8, 9], note: 'Check if the name is correct' },*/}
-              {/*{ loc: [11, 12], note: 'Hack: SSH into docker - saves you the trouble of installing the hydra CLI' },*/}
-              {/*{ loc: [14, 15], note: 'OAuth2 Client Credentials Flow' },*/}
-              {/*{ loc: [16, 17], note: 'OAuth2 Access Token!' },*/}
-              {/*{ loc: [18, 19], note: 'hydra token validate --skip-tls-verify <token>' },*/}
-              {/*{ loc: [21, 22] },*/}
-              {/*{ loc: [22, 26] },*/}
-              {/*{ loc: [26, 27] },*/}
-              {/*{ loc: [27, 28] },*/}
-              {/*{ loc: [28, 29] },*/}
-              {/*{ loc: [29, 30] },*/}
-              {/*{ loc: [30, 31] },*/}
-              {/*{ loc: [18 + 15, 19 + 15] },*/}
-              {/*{ loc: [19 + 15, 35 + 15] },*/}
-              {/*{ loc: [28 + 15, 29 + 15] },*/}
-              {/*{ loc: [29 + 15, 30 + 15] },*/}
-              {/*{ loc: [30 + 15, 31 + 15] }*/}
-            {/*]}/>*/}
+          {/*transition={[]}*/}
+          {/*lang="js"*/}
+          {/*code={require("raw!../assets/install")}*/}
+          {/*ranges={[*/}
+          {/*{ loc: [0, 1], note: 'If you don\'t have git, download the zip package from github.com/ory-am/hydra' },*/}
+          {/*{ loc: [2, 3] },*/}
+          {/*{ loc: [4, 5], note: 'SYSTEM_SECRET: This is used to encrypt data at rest' },*/}
+          {/*{ loc: [4, 5], note: 'DOCKER_IP: Only required when using docker inside a VM' },*/}
+          {/*{ loc: [4, 5] },*/}
+          {/*{ loc: [8, 9], note: 'Check if the name is correct' },*/}
+          {/*{ loc: [11, 12], note: 'Hack: SSH into docker - saves you the trouble of installing the hydra CLI' },*/}
+          {/*{ loc: [14, 15], note: 'OAuth2 Client Credentials Flow' },*/}
+          {/*{ loc: [16, 17], note: 'OAuth2 Access Token!' },*/}
+          {/*{ loc: [18, 19], note: 'hydra token validate --skip-tls-verify <token>' },*/}
+          {/*{ loc: [21, 22] },*/}
+          {/*{ loc: [22, 26] },*/}
+          {/*{ loc: [26, 27] },*/}
+          {/*{ loc: [27, 28] },*/}
+          {/*{ loc: [28, 29] },*/}
+          {/*{ loc: [29, 30] },*/}
+          {/*{ loc: [30, 31] },*/}
+          {/*{ loc: [18 + 15, 19 + 15] },*/}
+          {/*{ loc: [19 + 15, 35 + 15] },*/}
+          {/*{ loc: [28 + 15, 29 + 15] },*/}
+          {/*{ loc: [29 + 15, 30 + 15] },*/}
+          {/*{ loc: [30 + 15, 31 + 15] }*/}
+          {/*]}/>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*This was: Client Credentials Flow*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*This was: Client Credentials Flow*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Now: Authorize Code Flow*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Now: Authorize Code Flow*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Live Demo*/}
-            {/*</Heading>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Live Demo*/}
+          {/*</Heading>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*OpenID Connect: The ID Token*/}
-            {/*</Heading>*/}
-            {/*<Appear>*/}
-              {/*<Heading size={2} caps>*/}
-                {/*JSON Web Tokens?*/}
-              {/*</Heading>*/}
-            {/*</Appear>*/}
-            {/*<Appear>*/}
-              {/*<Heading size={2} textColor="white">*/}
-                {/*jwt.io*/}
-              {/*</Heading>*/}
-            {/*</Appear>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*OpenID Connect: The ID Token*/}
+          {/*</Heading>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} caps>*/}
+          {/*JSON Web Tokens?*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} textColor="white">*/}
+          {/*jwt.io*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Features*/}
-            {/*</Heading>*/}
-            {/*<List>*/}
-              {/*<Appear><ListItem>Delegate Authentication!</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Flows for services, web apps and mobile apps.</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Various interactions: Force password confirm, force 2FA, ...</ListItem></Appear>*/}
-            {/*</List>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Features*/}
+          {/*</Heading>*/}
+          {/*<List>*/}
+          {/*<Appear><ListItem>Delegate Authentication!</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Flows for services, web apps and mobile apps.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Various interactions: Force password confirm, force 2FA, ...</ListItem></Appear>*/}
+          {/*</List>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*OIDC neutralizes a Common Pitfall*/}
-            {/*</Heading>*/}
-            {/*<Appear>*/}
-              {/*<Heading size={2} caps>*/}
-                {/*Using OAuth2 for Authentication*/}
-              {/*</Heading>*/}
-            {/*</Appear>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*OIDC neutralizes a Common Pitfall*/}
+          {/*</Heading>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} caps>*/}
+          {/*Using OAuth2 for Authentication*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Scenario: You run a financial app*/}
-            {/*</Heading>*/}
-            {/*<Appear>*/}
-              {/*<Heading size={2} caps>*/}
-                {/*you allow people to sign in via google*/}
-              {/*</Heading>*/}
-            {/*</Appear>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Scenario: You run a financial app*/}
+          {/*</Heading>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} caps>*/}
+          {/*you allow people to sign in via google*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
           {/*</Slide>*/}
 
           {/*<Slide bgImage={images.substitution[0]} transition={["fade"]}/>*/}
@@ -583,26 +678,26 @@ export default class Presentation extends React.Component {
           {/*<Slide bgImage={images.substitution[2]} transition={["fade"]}/>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="white">*/}
-              {/*Questions?*/}
-            {/*</Heading>*/}
-            {/*<List>*/}
-              {/*<Appear><ListItem>Read Hydra Guide and API Docs</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Ask in Mailinglist</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Ask in Chat</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Create issue on GitHub</ListItem></Appear>*/}
-            {/*</List>*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Questions?*/}
+          {/*</Heading>*/}
+          {/*<List>*/}
+          {/*<Appear><ListItem>Read Hydra Guide and API Docs</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Ask in Mailinglist</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Ask in Chat</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Create issue on GitHub</ListItem></Appear>*/}
+          {/*</List>*/}
           {/*</Slide>*/}
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
-            {/*<Heading size={1} caps fit textColor="secondary">*/}
-              {/*Thank you for your time!*/}
-            {/*</Heading>*/}
-            {/*<List textColor="white">*/}
-              {/*<Appear><ListItem>Twitter: @_aeneasr</ListItem></Appear>*/}
-              {/*<Appear><ListItem>GitHub: @arekkas</ListItem></Appear>*/}
-              {/*<Appear><ListItem>Web: aeneas.io</ListItem></Appear>*/}
-            {/*</List>*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Thank you for your time!*/}
+          {/*</Heading>*/}
+          {/*<List textColor="white">*/}
+          {/*<Appear><ListItem>Twitter: @_aeneasr</ListItem></Appear>*/}
+          {/*<Appear><ListItem>GitHub: @arekkas</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Web: aeneas.io</ListItem></Appear>*/}
+          {/*</List>*/}
           {/*</Slide>*/}
 
         </Deck>

@@ -1,0 +1,104 @@
+https://circleci.com/auth/github
+    ?code=3fddaa394ae655e53ada
+    &state=xO-3xb7CGJ0Ig0meqM1pqy9I7dsz...
+
+
+curl -X POST \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d 'client_id=78a2ba87f071c28e65bb'
+    -d 'client_secret=....'
+    -d 'grant_type=authorize_code'
+    -d 'code=3fddaa394ae655e53ada' \
+    "https://github.com/oauth/token"
+
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+    "access_token": "882fb7a0f2a23f55be443d1e22e2547a67629103",
+    "expires_in": 3600,
+    "refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+    "token_type": "bearer"
+}
+
+
+curl -X GET
+    -H "Authorization: bearer 882fb7a0f2a23f55be443d1e22e2547a67629103"
+    "https://api.github.com/user/repos?sort=pushed"
+
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+[
+  {
+    "id": 75719913,
+    "name": "hydra-slides",
+    "full_name": "arekkas/hydra-slides",
+    "owner": {
+      "login": "arekkas",
+      "id": 3372410,
+      "avatar_url": "https://avatars.githubusercontent.com/u/3372410?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/arekkas",
+      "html_url": "https://github.com/arekkas",
+      "followers_url": "https://api.github.com/users/arekkas/followers",
+      "following_url": "https://api.github.com/users/arekkas/following{/other_user}",
+      "gists_url": "https://api.github.com/users/arekkas/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/arekkas/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/arekkas/subscriptions",
+      "organizations_url": "https://api.github.com/users/arekkas/orgs",
+      "repos_url": "https://api.github.com/users/arekkas/repos",
+      "events_url": "https://api.github.com/users/arekkas/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/arekkas/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "private": false,
+    "html_url": "https://github.com/arekkas/hydra-slides",
+    "description": null,
+    "fork": false,
+    "url": "https://api.github.com/repos/arekkas/hydra-slides",
+    "forks_url": "https://api.github.com/repos/arekkas/hydra-slides/forks",
+    "keys_url": "https://api.github.com/repos/arekkas/hydra-slides/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/arekkas/hydra-slides/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/arekkas/hydra-slides/teams",
+    "hooks_url": "https://api.github.com/repos/arekkas/hydra-slides/hooks",
+    "issue_events_url": "https://api.github.com/repos/arekkas/hydra-slides/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/arekkas/hydra-slides/events",
+    "assignees_url": "https://api.github.com/repos/arekkas/hydra-slides/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/arekkas/hydra-slides/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/arekkas/hydra-slides/tags",
+    "blobs_url": "https://api.github.com/repos/arekkas/hydra-slides/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/arekkas/hydra-slides/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/arekkas/hydra-slides/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/arekkas/hydra-slides/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/arekkas/hydra-slides/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/arekkas/hydra-slides/languages",
+    "stargazers_url": "https://api.github.com/repos/arekkas/hydra-slides/stargazers",
+    "contributors_url": "https://api.github.com/repos/arekkas/hydra-slides/contributors",
+    "subscribers_url": "https://api.github.com/repos/arekkas/hydra-slides/subscribers",
+    "subscription_url": "https://api.github.com/repos/arekkas/hydra-slides/subscription",
+    "commits_url": "https://api.github.com/repos/arekkas/hydra-slides/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/arekkas/hydra-slides/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/arekkas/hydra-slides/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/arekkas/hydra-slides/issues/comments{/number}",
+    "contents_url": "https://api.github.com/repos/arekkas/hydra-slides/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/arekkas/hydra-slides/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/arekkas/hydra-slides/merges",
+    "archive_url": "https://api.github.com/repos/arekkas/hydra-slides/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/arekkas/hydra-slides/downloads",
+    "issues_url": "https://api.github.com/repos/arekkas/hydra-slides/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/arekkas/hydra-slides/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/arekkas/hydra-slides/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/arekkas/hydra-slides/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/arekkas/hydra-slides/labels{/name}",
+    "releases_url": "https://api.github.com/repos/arekkas/hydra-slides/releases{/id}",
+    "deployments_url": "https://api.github.com/repos/arekkas/hydra-slides/deployments",
+    "created_at": "2016-12-06T10:17:46Z",
+    "updated_at": "2016-12-07T10:10:27Z",
+    "pushed_at": "2016-12-07T10:10:26Z",
+    "git_url": "git://github.com/arekkas/hydra-slides.git",
+    "ssh_url": "git@github.com:arekkas/hydra-slides.git",
+    "clone_url": "https://github.com/arekkas/hydra-slides.git",
+    "svn_url": "https://github.com/arekkas/hydra-slides",

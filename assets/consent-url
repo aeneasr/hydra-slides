@@ -1,0 +1,5 @@
+https://github.com/login/oauth/authorize
+    ?client_id=78a2ba87f071c28e65bb
+    &redirect_uri=https://circleci.com/auth/github
+    &scope=repo.user email
+    &state=xO-3xb7CGJ0Ig0meqM1pqy9I7dsz...
