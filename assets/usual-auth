@@ -1,0 +1,46 @@
+curl -X POST \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d 'username=ken&password=secret' \
+    "http://localhost/login"
+
+HTTP/1.1 200 OK
+Set-Cookie: session=Y29va2llIGF1ZmJhdQ...;
+            expires: ...;
+
+
+curl -X GET \
+    -H "Cookie: session=Y29va2llIGF1ZmJhdQ..."
+    "http://localhost/protected_page"
+
+HTTP/1.1 200 OK
+
+
+curl -X GET \
+    -H "Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+    "http://localhost/protected_page"
+
+HTTP/1.1 200 OK
+
+
+curl -X POST \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d 'username=ken&password=secret' \
+    "http://localhost/login"
+
+HTTP/1.1 200 OK
+
+{
+    "token": "IiwiYWRtaW4iOnRydWV9"
+}
+
+
+curl -X GET \
+    -H "Authorization: Bearer IiwiYWRtaW4iOnRydWV9"
+    "http://localhost/protected_page"
+
+HTTP/1.1 200 OK
+
+
+
+
+

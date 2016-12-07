@@ -1,0 +1,50 @@
+$ git clone https://github.com/ory-am/hydra.git
+
+$ cd hydra
+
+$ SYSTEM_SECRET=passwordtutorial DOCKER_IP=$(docker-machine ip default) docker-compose up -d
+Building hydra
+...
+Creating hydra_rethinkdb_1
+Creating hydra_hydra_1
+Creating hydra_consent_1
+
+$ docker exec -i -t hydra_hydra_1 /bin/bash
+root@1e1ced7592f9:/go/src/github.com/ory-am/hydra# hydra
+
+$ hydra token client --skip-tls-verify
+Warning: Skipping TLS Certificate Verification.
+JLbnRS9GQmzUBT4x7ESNw0kj2wc0ffbMwOv3QQZW4eI.qkP-IQXn6guoFew8TvaMFUD-SnAyT8GmWuqGi3wuWXg
+
+$ hydra token validate --skip-tls-verify JLbnRS9GQmzUBT4x7ESNw0kj2wc0ffbMwOv3QQZW4eI.qkP-IQXn6guoFew8TvaMFUD-SnAyT8GmWuqGi3wuWXg
+Warning: Skipping TLS Certificate Verification.
+{
+        "sub": "9752fbeb-763a-4a9d-9657-f17efddfe9ad",
+        "scopes": [
+                "core",
+                "hydra"
+        ],
+        "iss": "hydra",
+        "aud": "9752fbeb-763a-4a9d-9657-f17efddfe9ad",
+        "iat": "2016-07-08T15:31:53.4169662+02:00",
+        "exp": "2016-07-08T16:31:53.4169662+02:00"
+}
+
+
+$ docker logs hydra_hydra_1
+time="2016-07-07T11:30:22Z" level=info msg="DATABASE_URL set, connecting to RethinkDB."
+time="2016-07-07T11:30:22Z" level=info msg="Connecting with RethinkDB: rethinkdb://database:28015/hydra (database:28015) (hydra)"
+time="2016-07-07T11:30:22Z" level=info msg="Connected to RethinkDB!"
+time="2016-07-07T11:30:24Z" level=warning msg="Could not find OpenID Connect signing keys. Generating a new keypair..."
+time="2016-07-07T11:30:25Z" level=warning msg="Keypair generated."
+time="2016-07-07T11:30:25Z" level=warning msg="WARNING: Automated key creation causes low entropy. Replace the keys as soon as possible."
+time="2016-07-07T11:30:25Z" level=warning msg="Key pair for signing consent.endpoint is missing. Creating new one."
+time="2016-07-07T11:30:28Z" level=warning msg="Key pair for signing consent.challenge is missing. Creating new one."
+time="2016-07-07T11:30:31Z" level=warning msg="No clients were found. Creating a temporary root client..."
+time="2016-07-07T11:30:31Z" level=warning msg="Temporary root client created."
+time="2016-07-07T11:30:31Z" level=warning msg="client_id: 3a8b6230-84c1-4457-a8c7-deaa1a9345d8"
+time="2016-07-07T11:30:31Z" level=warning msg="client_secret: !.$N/i/dp)4x>M9g"
+time="2016-07-07T11:30:31Z" level=warning msg="The root client must be removed in production. The root's credentials could be accidentally logged."
+time="2016-07-07T11:30:31Z" level=warning msg="Do not use flag --dangerous-auto-logon in production."
+time="2016-07-07T11:30:31Z" level=warning msg="Key for TLS not found. Creating new one."
+time="2016-07-07T11:30:31Z" level=info msg="Starting server on :4444"

@@ -1,0 +1,3 @@
+curl -X GET \
+    -H "Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+    "http://localhost/protected_page"
