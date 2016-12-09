@@ -1,6 +1,6 @@
 // Import React
 import React from 'react'
-import { Appear, Deck, Heading, ListItem, List, Slide, Spectacle } from 'spectacle'
+import { Appear, Deck, Heading, ListItem, List, Slide, Spectacle, BlockQuote } from 'spectacle'
 import CodeSlide from 'spectacle-code-slide'
 import preloader from 'spectacle/lib/utils/preloader'
 import createTheme from 'spectacle/lib/themes/default'
@@ -35,6 +35,7 @@ const images = {
   dropbox: require("../assets/dropbox.gif"),
   quickstart: require("../assets/quickstart.png"),
   siege: require("../assets/siege.png"),
+  editor: require("../assets/ory-editor.png"),
   substitution: [
     require("../assets/token-substitution-1.png"),
     require("../assets/token-substitution-2.png"),
@@ -74,7 +75,7 @@ export default class Presentation extends React.Component {
             </Heading>
             <Appear>
               <Heading size={4} caps fit textColor="white">
-                OAuth2 and OpenID Connect
+                OAuth 2.0 Implementation
               </Heading>
             </Appear>
           </Slide>
@@ -83,6 +84,7 @@ export default class Presentation extends React.Component {
             <Heading size={1} caps fit textColor="secondary">
               Authentication
             </Heading>
+            <Appear><Heading size={4} textColor="white">Act of confirming an identity</Heading></Appear>
             <Appear><Heading size={4} textColor="white">Passport control at the airport</Heading></Appear>
           </Slide>
 
@@ -90,6 +92,7 @@ export default class Presentation extends React.Component {
             <Heading size={1} caps fit textColor="secondary">
               Authorization
             </Heading>
+            <Appear><Heading size={4} textColor="white">Act of controlling access requests</Heading></Appear>
             <Appear><Heading size={4} textColor="white">Paying $4,99 for a coffee</Heading></Appear>
           </Slide>
 
@@ -97,19 +100,22 @@ export default class Presentation extends React.Component {
             <Heading size={1} caps fit textColor="secondary">
               Delegation of Authorization
             </Heading>
-            <Appear><Heading size={6} textColor="white">Me trusting you with $4,99 to bring me a
-              coffee</Heading></Appear>
+            <Appear>
+              <Heading size={6} textColor="white">Me trusting you with $4,99 to bring me a
+                coffee</Heading>
+            </Appear>
           </Slide>
 
           <Slide transition={[]} bgColor="black">
             <Heading size={1} fit caps lineHeight={1} textColor="white">
-              Common HTTP auth
+              Common terminology<br/>in HTTP auth
             </Heading>
             <Appear>
               <div>
                 <Heading size={6} caps textColor="secondary">Cookie auth</Heading>
                 <Heading size={6} caps textColor="secondary">Basic auth</Heading>
                 <Heading size={6} caps textColor="secondary">Bearer auth</Heading>
+                <Heading size={6} caps textColor="secondary">JSON Web Token</Heading>
               </div>
             </Appear>
           </Slide>
@@ -119,14 +125,30 @@ export default class Presentation extends React.Component {
             lang="js"
             code={require("raw!../assets/usual-auth")}
             ranges={[
-              { loc: start(4), title: 'cookie auth' },
+              { loc: same(9), title: 'cookie auth' },
+              { loc: next(4), note: 'Client transmits credentials' },
               { loc: next(3, 1), note: 'Server responds with cookie' },
-              { loc: next(3, 2), note: 'User agent accesses protected page with cookie' },
-              { loc: next(3, 4), title: 'basic auth' },
-              { loc: same(1, 2), note: 'base64(ken:secret)' },
-              { loc: next(4, 4), title: 'bearer auth' },
+              { loc: next(3, 1), note: 'User agent accesses protected page with cookie' },
+              { loc: same(3, -4), title: 'basic auth' },
+              { loc: next(1, 5), note: 'base64(ken:secret)' },
+              { loc: next(4, 5), title: 'bearer auth' },
               { loc: next(5, 1), note: 'JSON response with a session identifier (token)' },
               { loc: next(3, 2), note: 'Pass token along as bearer RFC 6750 (OAuth 2.0 related)' },
+              { loc: next(3, 4), title: 'JSON Web Token (JWT)' },
+              {
+                loc: same(1, 3), note: `header: {
+  "alg": "HS256",
+  "typ": "JWT"
+}`
+              },
+              {
+                loc: same(1, 2), note: `payload: {
+  "sub": "1234567890",
+  "name": "John Doe",
+  "admin": true
+}`
+              },
+              { loc: same(1, 1), note: `HMAC SHA256 (header, payload) with password 'secret'` },
             ]}/>
 
           <Slide transition={[]} bgColor="black">
@@ -147,9 +169,9 @@ export default class Presentation extends React.Component {
                  bgSize="contain"
                  bgRepeat="no-repeat" bgDarken={0.85}>
             <Heading size={1} fit textColor="white">
-              Circle CI (not affiliated with GitHub) needs<br />
-              access to a user's GitHub repositories and creates<br />
-              a github developer account.
+              Circle CI (not affiliated with GitHub) created a<br />
+              GitHub developer account in order to be able to<br />
+              request access to a user's GitHub data (e.g. repositories)
             </Heading>
           </Slide>
 
@@ -195,16 +217,16 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["fade"]} bgImage={images.example[4]}
                  bgSize="contain"
-                 bgRepeat="no-repeat">
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.example[4]}
-                 bgSize="contain"
                  bgRepeat="no-repeat" bgDarken={0.85}>
             <Heading size={1} fit textColor="white">
               GitHub asks the user if it is ok to give<br/>
               Circle CI access to his data (email, repositories).
             </Heading>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.example[4]}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
           </Slide>
 
           <Slide transition={["fade"]} bgImage={images.example[5]}
@@ -216,7 +238,6 @@ export default class Presentation extends React.Component {
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
-
 
           <CodeSlide
             transition={[]}
@@ -233,7 +254,8 @@ export default class Presentation extends React.Component {
               { loc: next(1), note: 'Circle CI client secret' },
               { loc: next(1), note: 'Could also be refresh_token, client_credentials, ...' },
               { loc: next(1), note: 'Authorization code from above' },
-              { loc: next(4, 2), title: 'OAuth 2.0 Token Reply' },
+              { loc: next(1), note: 'OAuth2 Token endpoint' },
+              { loc: next(4, 1), title: 'OAuth 2.0 Token Reply' },
               { loc: next(2, 2), note: 'Short lifetime token (here: one hour)' },
               { loc: next(1), note: 'One time password for refreshing the access token' },
               { loc: next(4, 2), title: 'Authorized request' },
@@ -336,6 +358,12 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
+              Consent Flow Code Slide
+            </Heading>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
               Motivation
             </Heading>
           </Slide>
@@ -399,14 +427,173 @@ export default class Presentation extends React.Component {
           <Slide transition={["fade"]} bgImage={images.serlo}
                  bgSize="contain"
                  bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} fit textColor="white">
-              SERLO EDUCATION
+            <Heading size={1} textColor="secondary">
+              serlo.org
             </Heading>
+              <Appear>
+                <BlockQuote textColor="white">
+                  Unsere Vision ist freie Bildung, die von einer offenen und unabhängigen Gemeinschaft gestaltet wird.
+                  Durch breite Beteiligung entstehen verständliche und fundierte Lernmaterialien, die allen gleichermaßen kostenlos zugänglich sind.
+                  Freie Bildung ist somit Bestandteil einer vielfältigen und vernetzten Gesellschaft mit starkem Gemeinsinn und selbstbestimmten Menschen, die Freude am Lernen haben.
+                </BlockQuote>
+              </Appear>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  Like Wikipedia, but optimized for educational content.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Non-profit organization founded by Simon Köhl and me
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  50 active volunteers, 600.000+ unique visitors per month, growth accelerating, currently ~20.000 per month
+                </ListItem>
+              </Appear>
+            </List>
           </Slide>
 
           <Slide transition={["fade"]} bgImage={images.serlo}
                  bgSize="contain"
                  bgRepeat="no-repeat">
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.serlo}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} textColor="secondary">
+              CHALLENGES
+            </Heading>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  Scaling issues with increasing traffic
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Split up application into micro services and use Hydra for centralised access control.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Provide better learning tools, progress management, recommendations, ...
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Allow integration of third party tools, expose APIs via OAuth2
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Improve author experience
+                </ListItem>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.editor}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} fit textColor="secondary">
+              IMPROVING AUTHOR EXPERIENCE:
+            </Heading>
+            <Appear>
+              <Heading size={1} caps fit textColor="white">
+                The ORY Editor
+              </Heading>
+            </Appear>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.editor}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              Feature Highlights
+            </Heading>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              OPEN SOURCE
+            </Heading>
+            <Heading size={2} caps textColor="white">
+              APACHE 2.0 LICENSE
+            </Heading>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              EASE OF USE
+            </Heading>
+            code slides with docker example
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              OAUTH2 SECURITY OUTLINES
+            </Heading>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  Only token signatures are stored in the database
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  BCrypt is used for OAuth 2.0 client secret hashing
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  RSA 256 is used to sign cryptographic tokens
+                </ListItem>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              ACCESS CONTROL POLICIES
+            </Heading>
+            code slides with docker example
+            Is able to answer the following questions:
+            * Is Peter allowed to modify a student's grade, if the student is attending Peter's class?
+            *
+            * Is Peter allowed to send an email, if the recipient is one of Max or Dan, and if Peter is a part of LMU
+            PST?
+
+            HOW?
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              JSON Web Key Management
+            </Heading>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  General purpose store for cryptographic keys for encryption and signing.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Keys are encrypted with AES-256-GCM before storage in database.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  AES-GCM provides both confidentiality and data origin authentication.
+                </ListItem>
+              </Appear>
+            </List>
           </Slide>
 
           <Slide transition={["zoom"]} bgColor="black">
@@ -417,7 +604,7 @@ export default class Presentation extends React.Component {
               <Appear>
                 <div>
                   <ListItem textColor="white">
-                    Prominent topic on hackernews and network security forums and very positive feedback
+                    Prominent topic on hacker news and network security communities
                   </ListItem>
                   <ListItem textColor="white">
                     2200+ GitHub stars
@@ -429,9 +616,28 @@ export default class Presentation extends React.Component {
                     ~1000 unique visitors per month on GitHub
                   </ListItem>
                   <ListItem textColor="white">
-                    24 contributors, active community, 3 company adopters
+                    Active chat community with daily activity
+                  </ListItem>
+                  <ListItem textColor="white">
+                    Multiple company adopters
+                  </ListItem>
+                  <ListItem textColor="white">
+                    24 contributors
                   </ListItem>
                 </div>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              THANK YOU
+            </Heading>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  General purpose store for cryptographic keys for encryption and signing.
+                </ListItem>
               </Appear>
             </List>
           </Slide>
