@@ -20,6 +20,7 @@ require("spectacle/lib/themes/default/index.css");
 
 //
 const images = {
+  serlo: require('../assets/serlo.png'),
   example: [
     require("../assets/circleci.png"),
     require("../assets/circleci-2.png"),
@@ -139,14 +140,20 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["fade"]} bgImage={images.example[0]}
                  bgSize="contain"
-                 bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} fit textColor="white">
-              Circle CI (not affiliated with GitHub) needs<br />
-              access to a user's GitHub repositories.
-            </Heading>
+                 bgRepeat="no-repeat">
           </Slide>
 
           <Slide transition={["fade"]} bgImage={images.example[0]}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} fit textColor="white">
+              Circle CI (not affiliated with GitHub) needs<br />
+              access to a user's GitHub repositories and creates<br />
+              a github developer account.
+            </Heading>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.example[1]}
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
@@ -160,7 +167,7 @@ export default class Presentation extends React.Component {
             </Heading>
           </Slide>
 
-          <Slide transition={["fade"]} bgImage={images.example[1]}
+          <Slide transition={["fade"]} bgImage={images.example[2]}
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
@@ -171,7 +178,7 @@ export default class Presentation extends React.Component {
             code={require("raw!../assets/auth-url")}
             ranges={[
               { loc: start(1), title: 'OAuth 2.0 Authorize Code Flow' },
-              { loc: next(1), note: 'Client id for Circle CI' },
+              { loc: next(1), note: 'Client id for Circle CI from developer account' },
               { loc: next(1), note: 'Where to redirect after success / failure' },
               { loc: next(1), note: 'Request access to the user\'s email and all of his repositories' },
               { loc: next(1), note: 'Anti-CSRF & -replay token' },
@@ -186,7 +193,7 @@ export default class Presentation extends React.Component {
             </Heading>
           </Slide>
 
-          <Slide transition={["fade"]} bgImage={images.example[2]}
+          <Slide transition={["fade"]} bgImage={images.example[4]}
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
@@ -200,10 +207,16 @@ export default class Presentation extends React.Component {
             </Heading>
           </Slide>
 
-          <Slide transition={["fade"]} bgImage={images.example[4]}
+          <Slide transition={["fade"]} bgImage={images.example[5]}
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.example[6]}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
+          </Slide>
+
 
           <CodeSlide
             transition={[]}
@@ -215,6 +228,7 @@ export default class Presentation extends React.Component {
               { loc: next(1), note: 'OAuth2 Authorize Code' },
               { loc: next(1), note: 'Anti-CSRF token from earlier' },
               { loc: next(1, 2), title: 'exchange code for tokens' },
+              { loc: same(1), note: 'https://github.com/oauth/token' },
               { loc: next(1, 1), note: 'Circle CI client id' },
               { loc: next(1), note: 'Circle CI client secret' },
               { loc: next(1), note: 'Could also be refresh_token, client_credentials, ...' },
@@ -249,19 +263,6 @@ export default class Presentation extends React.Component {
           </Slide>
 
           <Slide transition={["fade"]} bgImage={images.example[5]}
-                 bgSize="contain"
-                 bgRepeat="no-repeat">
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.example[6]}
-                 bgSize="contain"
-                 bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} fit textColor="white">
-              Compare with GitHub
-            </Heading>
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.example[6]}
                  bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
@@ -301,7 +302,7 @@ export default class Presentation extends React.Component {
             </Appear>
             <Appear>
               <Heading size={5} caps textColor="secondary">
-                Difficult to implement
+                OAuth2 provider difficult to implement
               </Heading>
             </Appear>
           </Slide>
@@ -335,7 +336,7 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
-              Why?
+              Motivation
             </Heading>
           </Slide>
 
@@ -391,22 +392,44 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
-              Results
+              Use Case
+            </Heading>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.serlo}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} fit textColor="white">
+              SERLO EDUCATION
+            </Heading>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.serlo}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
+          </Slide>
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              Reception
             </Heading>
             <List>
-              <ListItem textColor="white">
-                Prominent topic on hackernews and network security forums and very positive feedback
-              </ListItem>
               <Appear>
                 <div>
+                  <ListItem textColor="white">
+                    Prominent topic on hackernews and network security forums and very positive feedback
+                  </ListItem>
                   <ListItem textColor="white">
                     2200+ GitHub stars
                   </ListItem>
                   <ListItem textColor="white">
-                    24 contributors, active community, 3 company adopters
+                    9600+ Docker Image Downloads
                   </ListItem>
                   <ListItem textColor="white">
-                    ~1000 unique visitors per month
+                    ~1000 unique visitors per month on GitHub
+                  </ListItem>
+                  <ListItem textColor="white">
+                    24 contributors, active community, 3 company adopters
                   </ListItem>
                 </div>
               </Appear>
