@@ -1,6 +1,6 @@
 // Import React
 import React from 'react'
-import { Appear, Deck, Heading, ListItem, List, Slide, Spectacle, BlockQuote } from 'spectacle'
+import { Appear, Deck, Heading, ListItem, List, Slide, Spectacle, BlockQuote, Quote } from 'spectacle'
 import CodeSlide from 'spectacle-code-slide'
 import preloader from 'spectacle/lib/utils/preloader'
 import createTheme from 'spectacle/lib/themes/default'
@@ -36,6 +36,10 @@ const images = {
   quickstart: require("../assets/quickstart.png"),
   siege: require("../assets/siege.png"),
   editor: require("../assets/ory-editor.png"),
+  client: [
+    require("../assets/create-client.png"),
+    require("../assets/create-client-2.png")
+  ],
   substitution: [
     require("../assets/token-substitution-1.png"),
     require("../assets/token-substitution-2.png"),
@@ -63,19 +67,18 @@ const start = (len = 1) => {
 }
 const same = (len = 1, offset = 1) => [last - offset, last + len - offset]
 
-
 export default class Presentation extends React.Component {
   render() {
     return (
       <Spectacle theme={theme} bgColor="black">
-        <Deck transition={["zoom", "slide"]} transitionDuration={500} bgColor="black">
+        <Deck transition={["zoom", "slide"]} progress="bar" transitionDuration={500} bgColor="black">
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} fit caps lineHeight={1} textColor="secondary">
               Hydra
             </Heading>
             <Appear>
               <Heading size={4} caps fit textColor="white">
-                OAuth 2.0 Implementation
+                OAuth 2.0 Authorization Framework
               </Heading>
             </Appear>
           </Slide>
@@ -92,7 +95,7 @@ export default class Presentation extends React.Component {
             <Heading size={1} caps fit textColor="secondary">
               Authorization
             </Heading>
-            <Appear><Heading size={4} textColor="white">Act of controlling access requests</Heading></Appear>
+            <Appear><Heading size={4} textColor="white">Act of controlling access</Heading></Appear>
             <Appear><Heading size={4} textColor="white">Paying $4,99 for a coffee</Heading></Appear>
           </Slide>
 
@@ -108,7 +111,7 @@ export default class Presentation extends React.Component {
 
           <Slide transition={[]} bgColor="black">
             <Heading size={1} fit caps lineHeight={1} textColor="white">
-              Common terminology<br/>in HTTP auth
+              Common HTTP auth
             </Heading>
             <Appear>
               <div>
@@ -165,14 +168,26 @@ export default class Presentation extends React.Component {
                  bgRepeat="no-repeat">
           </Slide>
 
-          <Slide transition={["fade"]} bgImage={images.example[0]}
+          <Slide transition={["fade"]} bgImage={images.client[0]}
                  bgSize="contain"
                  bgRepeat="no-repeat" bgDarken={0.85}>
             <Heading size={1} fit textColor="white">
-              Circle CI (not affiliated with GitHub) created a<br />
-              GitHub developer account in order to be able to<br />
-              request access to a user's GitHub data (e.g. repositories)
+              Scenario: Circle CI wants to access a user's data<br />
+              on GitHub. Circle CI is not affiliated with GitHub.
             </Heading>
+            <Appear><Heading size={6} textColor="secondary">
+              First step: Create an OAuth2 Client
+            </Heading></Appear>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.client[0]}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.client[1]}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
           </Slide>
 
           <Slide transition={["fade"]} bgImage={images.example[1]}
@@ -268,9 +283,31 @@ export default class Presentation extends React.Component {
                  bgRepeat="no-repeat" bgDarken={0.85}>
             <List>
               <ListItem textColor="white">
+                A developer account was created, the <strong>OAuth2 client</strong>.
+              </ListItem>
+              <Appear>
+                <ListItem textColor="white">
+                  Circle CI redirects the user to the <strong>oauth2 authorize url</strong>,<br />
+                  and specifies what access privileges are required.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  GitHub authenticates the user (<strong>not OAuth2</strong>) if required.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  GitHub asks the user for his <strong>consent</strong> to grant Circle CI<br/>
+                  certain privileges.
+                </ListItem>
+              </Appear>
+              <Appear>
+              <ListItem textColor="white">
                 GitHub redirects the user agent back to Circle CI,<br />
                 passing along an <strong>authorization code</strong>.
               </ListItem>
+              </Appear>
               <Appear>
                 <ListItem textColor="white">
                   Circle CI exchanges the authorization code for an <strong>access token</strong>.
@@ -286,8 +323,16 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["fade"]} bgImage={images.example[5]}
                  bgSize="contain"
-                 bgRepeat="no-repeat">
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <BlockQuote textColor="white">
+              The OAuth 2.0 authorization framework enables a third-party
+              application to obtain limited access to an HTTP service, either on
+              behalf of a resource owner by orchestrating an approval interaction
+              between the resource owner and the HTTP service, or by allowing the
+              third-party application to obtain access on its own behalf.
+            </BlockQuote>
           </Slide>
+
 
           <Slide transition={["fade"]} bgImage={images.example[7]}
                  bgSize="contain"
@@ -314,7 +359,7 @@ export default class Presentation extends React.Component {
             </Appear>
             <Appear>
               <Heading size={5} caps textColor="secondary">
-                OAuth 2.0 login vulnerability
+                OAuth 2.0 is not for authentication
               </Heading>
             </Appear>
             <Appear>
@@ -356,13 +401,49 @@ export default class Presentation extends React.Component {
             </Heading>
           </Slide>
 
+          <Slide transition={[]} bgColor="black">
+            <Heading size={2} fit lineHeight={1} textColor="white">
+              Consent flow
+            </Heading>
+            <Appear>
+              <Heading size={6} textColor="secondary">
+                The consent flow decouples authorization and authentication.
+              </Heading>
+            </Appear>
+            <Appear>
+              <Heading size={6} textColor="white">
+                Hydra uses cryptographically signed tokens to exchange information between the authentication provider and itself.
+              </Heading>
+            </Appear>
+          </Slide>
+
           <CodeSlide
             transition={[]}
             lang="js"
-            code={require("raw!../assets/consent-flow")}
+            code={require("raw!../assets/consent-url")}
             ranges={[
               { loc: start(0), title: 'Consent Flow' },
-              { loc: next(1), note: 'Callback URL provided earlier' },
+              { loc: next(1), note: 'OAuth2 authorize endpoint (Hydra is running on port 4444)' },
+              { loc: next(1), note: 'OAuth2 Client ID' },
+              { loc: next(1), note: 'The CLI set up a http server at port 4445 for the callback'  },
+              { loc: next(1) },
+              { loc: next(1) },
+              { loc: next(1) },
+              { loc: next(1, 3), note: <span>Hydra redirects to the <em>consent app</em>, appending a JWT: the <em>consent challenge</em></span> },
+              { loc: next(4, 1), note: 'Consent challenge JWT header' },
+              { loc: next(1), note: 'Consent challenge JWT payload' },
+              { loc: next(1), note: 'Audience (e.g. Circle CI)' },
+              { loc: next(1,1), note: 'Anti-Replay & -CSRF token' },
+              { loc: next(1), note: 'Where to redirect after authentication (OAuth2 authorize url from line 1)' },
+              { loc: next(5), note: 'What access rights (scopes) have been requested' },
+              { loc: next(1, 3), note: 'After the user authenticated and gave his consent to allow the app to act on his behalf, he is redirected back to the Hydra' },
+              { loc: next(6), note: <span>Same values as before, taken from the <code>redir</code> value</span> },
+              { loc: next(1), note: 'Also, the consent response was added. It is also a signed JWT. Keys can be provided by hydra!' },
+              { loc: next(1, 2), note: 'The OAuth2 client who initiated the request (in this case, admin)' },
+              { loc: next(1), note: 'The OAuth2 client who initiated the request (in this case, admin)' },
+              { loc: next(1), note: 'Anti-Replay & -CSRF token echo' },
+              { loc: next(4), note: 'List of scopes the user agreed to (note: openid missing)' },
+              { loc: next(1), note: `The user's id (abritrary)` },
             ]}/>
 
           <Slide transition={["zoom"]} bgColor="black">
@@ -465,7 +546,7 @@ export default class Presentation extends React.Component {
             code={require("raw!../assets/policy")}
             ranges={[
               { loc: 0, title: 'ACCESS CONTROL POLICIES' },
-              { loc: next(2, 3), note: 'Make POST request to warden (simplified)' },
+              { loc: next(2, 2), note: 'Make POST request (simplified)' },
               { loc: next(1, 1), note: 'Who is making the request?' },
               { loc: next(1), note: 'What is the person trying to do?' },
               { loc: next(1), note: 'Who is impacted by the action?' },
@@ -535,6 +616,32 @@ export default class Presentation extends React.Component {
               </Appear>
             </List>
           </Slide>
+
+
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              What the community is saying
+            </Heading>
+            <List>
+              <Appear>
+                <div>
+                  <BlockQuote textColor="white">
+                    "Nice! Lowering barriers to the use of technologies like these is important."<br />
+                    <em>Pyxl101</em>
+                  </BlockQuote>
+                  <BlockQuote textColor="white">
+                    "OAuth is a framework not a protocol. The security it provides can vary greatly between implementations. Fosite (which is what this is based on) is a very good implementation from a security perspective"<br />
+                    <em>abritishguy</em>
+                  </BlockQuote>
+                  <BlockQuote textColor="white">
+                    "Thanks for releasing this by the way, looks really well engineered."<br/>
+                    <em>olalonde</em>
+                  </BlockQuote>
+                </div>
+              </Appear>
+            </List>
+          </Slide>
+
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
               Use Cases
@@ -638,14 +745,62 @@ export default class Presentation extends React.Component {
             <Heading size={1} caps fit textColor="secondary">
               THANK YOU
             </Heading>
-            <List>
-              <Appear>
-                <ListItem textColor="white">
-                  General purpose store for cryptographic keys for encryption and signing.
-                </ListItem>
-              </Appear>
-            </List>
           </Slide>
+
+
+          {/*<Slide transition={["zoom"]} bgColor="black">*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*OpenID Connect: The ID Token*/}
+          {/*</Heading>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} caps>*/}
+          {/*JSON Web Tokens?*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} textColor="white">*/}
+          {/*jwt.io*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
+          {/*</Slide>*/}
+
+          {/*<Slide transition={["zoom"]} bgColor="black">*/}
+          {/*<Heading size={1} caps fit textColor="secondary">*/}
+          {/*Features*/}
+          {/*</Heading>*/}
+          {/*<List>*/}
+          {/*<Appear><ListItem>Delegate Authentication!</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Flows for services, web apps and mobile apps.</ListItem></Appear>*/}
+          {/*<Appear><ListItem>Various interactions: Force password confirm, force 2FA, ...</ListItem></Appear>*/}
+          {/*</List>*/}
+          {/*</Slide>*/}
+
+          {/*<Slide transition={["zoom"]} bgColor="black">*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*OIDC neutralizes a Common Pitfall*/}
+          {/*</Heading>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} caps>*/}
+          {/*Using OAuth2 for Authentication*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
+          {/*</Slide>*/}
+
+          {/*<Slide transition={["zoom"]} bgColor="black">*/}
+          {/*<Heading size={1} caps fit textColor="white">*/}
+          {/*Scenario: You run a financial app*/}
+          {/*</Heading>*/}
+          {/*<Appear>*/}
+          {/*<Heading size={2} caps>*/}
+          {/*you allow people to sign in via google*/}
+          {/*</Heading>*/}
+          {/*</Appear>*/}
+          {/*</Slide>*/}
+
+          {/*<Slide bgImage={images.substitution[0]} transition={["fade"]}/>*/}
+          {/*<Slide bgImage={images.substitution[1]} transition={["fade"]}/>*/}
+          {/*<Slide bgImage={images.substitution[2]} transition={["fade"]}/>*/}
+
 
           {/*<Slide transition={["zoom"]} bgColor="black">*/}
           {/*<Heading size={1} caps fit textColor="white">*/}
@@ -688,6 +843,7 @@ export default class Presentation extends React.Component {
           {/*<Heading size={1} caps fit textColor="secondary">*/}
           {/*Delegation of Authorization*/}
           {/*</Heading>*/}
+          {/*<Appear><Heading size={6} textColor="white">Paying with a stranger's money at a point of*/}
           {/*<Appear><Heading size={6} textColor="white">Paying with a stranger's money at a point of*/}
           {/*sale</Heading></Appear>*/}
           {/*<Appear><Heading size={2} textColor="important">OAuth2!</Heading></Appear>*/}
