@@ -356,11 +356,14 @@ export default class Presentation extends React.Component {
             </Heading>
           </Slide>
 
-          <Slide transition={["zoom"]} bgColor="black">
-            <Heading size={1} caps fit textColor="secondary">
-              Consent Flow Code Slide
-            </Heading>
-          </Slide>
+          <CodeSlide
+            transition={[]}
+            lang="js"
+            code={require("raw!../assets/consent-flow")}
+            ranges={[
+              { loc: start(0), title: 'Consent Flow' },
+              { loc: next(1), note: 'Callback URL provided earlier' },
+            ]}/>
 
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
@@ -420,103 +423,7 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
-              Use Case
-            </Heading>
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.serlo}
-                 bgSize="contain"
-                 bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} textColor="secondary">
-              serlo.org
-            </Heading>
-              <Appear>
-                <BlockQuote textColor="white">
-                  Unsere Vision ist freie Bildung, die von einer offenen und unabhängigen Gemeinschaft gestaltet wird.
-                  Durch breite Beteiligung entstehen verständliche und fundierte Lernmaterialien, die allen gleichermaßen kostenlos zugänglich sind.
-                  Freie Bildung ist somit Bestandteil einer vielfältigen und vernetzten Gesellschaft mit starkem Gemeinsinn und selbstbestimmten Menschen, die Freude am Lernen haben.
-                </BlockQuote>
-              </Appear>
-            <List>
-              <Appear>
-                <ListItem textColor="white">
-                  Like Wikipedia, but optimized for educational content.
-                </ListItem>
-              </Appear>
-              <Appear>
-                <ListItem textColor="secondary">
-                  Non-profit organization founded by Simon Köhl and me
-                </ListItem>
-              </Appear>
-              <Appear>
-                <ListItem textColor="white">
-                  50 active volunteers, 600.000+ unique visitors per month, growth accelerating, currently ~20.000 per month
-                </ListItem>
-              </Appear>
-            </List>
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.serlo}
-                 bgSize="contain"
-                 bgRepeat="no-repeat">
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.serlo}
-                 bgSize="contain"
-                 bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} textColor="secondary">
-              CHALLENGES
-            </Heading>
-            <List>
-              <Appear>
-                <ListItem textColor="white">
-                  Scaling issues with increasing traffic
-                </ListItem>
-              </Appear>
-              <Appear>
-                <ListItem textColor="secondary">
-                  Split up application into micro services and use Hydra for centralised access control.
-                </ListItem>
-              </Appear>
-              <Appear>
-                <ListItem textColor="white">
-                  Provide better learning tools, progress management, recommendations, ...
-                </ListItem>
-              </Appear>
-              <Appear>
-                <ListItem textColor="secondary">
-                  Allow integration of third party tools, expose APIs via OAuth2
-                </ListItem>
-              </Appear>
-              <Appear>
-                <ListItem textColor="white">
-                  Improve author experience
-                </ListItem>
-              </Appear>
-            </List>
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.editor}
-                 bgSize="contain"
-                 bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} fit textColor="secondary">
-              IMPROVING AUTHOR EXPERIENCE:
-            </Heading>
-            <Appear>
-              <Heading size={1} caps fit textColor="white">
-                The ORY Editor
-              </Heading>
-            </Appear>
-          </Slide>
-
-          <Slide transition={["fade"]} bgImage={images.editor}
-                 bgSize="contain"
-                 bgRepeat="no-repeat">
-          </Slide>
-
-          <Slide transition={["zoom"]} bgColor="black">
-            <Heading size={1} caps fit textColor="secondary">
-              Feature Highlights
+              Highlights
             </Heading>
           </Slide>
 
@@ -527,13 +434,6 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps textColor="white">
               APACHE 2.0 LICENSE
             </Heading>
-          </Slide>
-
-          <Slide transition={["zoom"]} bgColor="black">
-            <Heading size={1} caps fit textColor="secondary">
-              EASE OF USE
-            </Heading>
-            code slides with docker example
           </Slide>
 
           <Slide transition={["zoom"]} bgColor="black">
@@ -559,19 +459,26 @@ export default class Presentation extends React.Component {
             </List>
           </Slide>
 
-          <Slide transition={["zoom"]} bgColor="black">
-            <Heading size={1} caps fit textColor="secondary">
-              ACCESS CONTROL POLICIES
-            </Heading>
-            code slides with docker example
-            Is able to answer the following questions:
-            * Is Peter allowed to modify a student's grade, if the student is attending Peter's class?
-            *
-            * Is Peter allowed to send an email, if the recipient is one of Max or Dan, and if Peter is a part of LMU
-            PST?
-
-            HOW?
-          </Slide>
+          <CodeSlide
+            transition={[]}
+            lang="js"
+            code={require("raw!../assets/policy")}
+            ranges={[
+              { loc: 0, title: 'ACCESS CONTROL POLICIES' },
+              { loc: next(2, 3), note: 'Make POST request to warden (simplified)' },
+              { loc: next(1, 1), note: 'Who is making the request?' },
+              { loc: next(1), note: 'What is the person trying to do?' },
+              { loc: next(1), note: 'Who is impacted by the action?' },
+              { loc: next(3), note: 'Information on the environment' },
+              { loc: next(4, 5), note: 'To whom does the policy apply?' },
+              { loc: same(1, 3), note: 'Arbitrary names' },
+              { loc: same(1, 2), note: 'Supports regex encapsulated in `<` `>`' },
+              { loc: next(1), note: 'Can be allow or deny' },
+              { loc: next(3), note: 'A list of resources the policy applies to' },
+              { loc: next(4), note: 'What interactions the policy applies to' },
+              { loc: next(8, 0), note: 'Conditions' },
+              { loc: same(6, 7), note: 'Policy applies only if ip ranges matches' },
+            ]}/>
 
           <Slide transition={["zoom"]} bgColor="black">
             <Heading size={1} caps fit textColor="secondary">
@@ -627,6 +534,104 @@ export default class Presentation extends React.Component {
                 </div>
               </Appear>
             </List>
+          </Slide>
+          <Slide transition={["zoom"]} bgColor="black">
+            <Heading size={1} caps fit textColor="secondary">
+              Use Cases
+            </Heading>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.serlo}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} textColor="secondary">
+              serlo.org
+            </Heading>
+            <Appear>
+              <BlockQuote textColor="white">
+                Unsere Vision ist freie Bildung, die von einer offenen und unabhängigen Gemeinschaft gestaltet wird.
+                Durch breite Beteiligung entstehen verständliche und fundierte Lernmaterialien, die allen gleichermaßen
+                kostenlos zugänglich sind.
+                Freie Bildung ist somit Bestandteil einer vielfältigen und vernetzten Gesellschaft mit starkem
+                Gemeinsinn und selbstbestimmten Menschen, die Freude am Lernen haben.
+              </BlockQuote>
+            </Appear>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  Like Wikipedia, but optimized for educational content.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Non-profit organization founded by Simon Köhl and me
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  50 active volunteers, 600.000+ unique visitors per month, growth accelerating, currently ~20.000 per
+                  month
+                </ListItem>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.serlo}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.serlo}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} textColor="secondary">
+              CHALLENGES
+            </Heading>
+            <List>
+              <Appear>
+                <ListItem textColor="white">
+                  Scaling issues with increasing traffic
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Split up application into micro services and use Hydra for centralised access control.
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Provide better learning tools, progress management, recommendations, ...
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="secondary">
+                  Allow integration of third party tools, expose APIs via OAuth2
+                </ListItem>
+              </Appear>
+              <Appear>
+                <ListItem textColor="white">
+                  Improve author experience
+                </ListItem>
+              </Appear>
+            </List>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.editor}
+                 bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} fit textColor="secondary">
+              BETTER AUTHOR EXPERIENCE:
+            </Heading>
+            <Appear>
+              <Heading size={1} caps fit textColor="white">
+                The ORY Editor
+              </Heading>
+            </Appear>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.editor}
+                 bgSize="contain"
+                 bgRepeat="no-repeat">
           </Slide>
 
           <Slide transition={["zoom"]} bgColor="black">

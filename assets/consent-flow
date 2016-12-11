@@ -1,0 +1,7 @@
+http://hydra.localhost/oauth2/auth
+    ?client_id=admin
+    &redirect_uri=http://app.localhost/callback
+    &response_type=code
+    &scope=hydra+offline+openid
+    &state=wahnqdbwgzxvvfxgrtmvpims
+

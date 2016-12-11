@@ -1,0 +1,38 @@
+curl \
+      -H "Content-Type: application/json" \
+      -d@- \
+      -X POST \
+      "https://hydra.localhost/warden/allowed" <<EOF
+      {
+          "subject": "lmu:ifi:pst:bry",
+          "action" : "update",
+          "resource": "students:aeneas-rekkas:courses:tel:grades",
+          "context": {
+            "remoteIP": "192.168.0.5"
+          }
+      }
+  EOF
+
+
+{
+  "subjects": [
+    "peter",
+    "lmu:ifi:pst:<ohlbach|bry>"
+  ],
+  "effect": "allow",
+  "resources": [
+    "students:<*>:courses:tel:grades"
+  ],
+  "actions": [
+    "get",
+    "update"
+  ],
+  "conditions": {
+    "remoteIP": {
+        "type": "CIDRCondition",
+        "options": {
+            "cidr": "192.168.0.1/16"
+        }
+    }
+  }
+}
