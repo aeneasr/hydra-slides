@@ -545,8 +545,8 @@ export default class Presentation extends React.Component {
             lang="js"
             code={require("raw!../assets/policy")}
             ranges={[
-              { loc: 0, title: 'ACCESS CONTROL POLICIES' },
-              { loc: next(2, 2), note: 'Make POST request (simplified)' },
+              { loc: start(0), title: 'ACCESS CONTROL POLICIES' },
+              { loc: next(2, 3), note: 'Make POST request (simplified)' },
               { loc: next(1, 1), note: 'Who is making the request?' },
               { loc: next(1), note: 'What is the person trying to do?' },
               { loc: next(1), note: 'Who is impacted by the action?' },
