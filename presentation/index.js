@@ -151,7 +151,7 @@ export default class Presentation extends React.Component {
   "admin": true
 }`
               },
-              { loc: same(1, 1), note: `HMAC SHA256 (header, payload) with password 'secret'` },
+              { loc: same(1, 1), note: `HMAC SHA (header, payload) with password 'secret'` },
             ]}/>
 
           <Slide transition={[]} bgColor="black">
@@ -206,6 +206,14 @@ export default class Presentation extends React.Component {
 
           <Slide transition={["fade"]} bgImage={images.example[2]}
                  bgSize="contain"
+                 bgRepeat="no-repeat" bgDarken={0.85}>
+            <Heading size={1} fit textColor="white">
+              GitHub asks the user to authenticate (cookie auth).
+            </Heading>
+          </Slide>
+
+          <Slide transition={["fade"]} bgImage={images.example[2]}
+                 bgSize="contain"
                  bgRepeat="no-repeat">
           </Slide>
 
@@ -221,14 +229,6 @@ export default class Presentation extends React.Component {
               { loc: next(1), note: 'Anti-CSRF & -replay token' },
               { loc: next(3, 5), note: 'User is not logged in, redirect' },
             ]}/>
-
-          <Slide transition={["fade"]} bgImage={images.example[2]}
-                 bgSize="contain"
-                 bgRepeat="no-repeat" bgDarken={0.85}>
-            <Heading size={1} fit textColor="white">
-              GitHub asks the user to authenticate (cookie auth).
-            </Heading>
-          </Slide>
 
           <Slide transition={["fade"]} bgImage={images.example[4]}
                  bgSize="contain"
@@ -260,7 +260,7 @@ export default class Presentation extends React.Component {
             code={require("raw!../assets/callback-url")}
             ranges={[
               { loc: start(0), title: 'OAuth 2.0 Token Exchange' },
-              { loc: next(1), note: 'Callback URL provided earlier' },
+              { loc: next(1), note: 'Redirect URL provided earlier' },
               { loc: next(1), note: 'OAuth2 Authorize Code' },
               { loc: next(1), note: 'Anti-CSRF token from earlier' },
               { loc: next(1, 2), title: 'exchange code for tokens' },
@@ -269,8 +269,8 @@ export default class Presentation extends React.Component {
               { loc: next(1), note: 'Circle CI client secret' },
               { loc: next(1), note: 'Could also be refresh_token, client_credentials, ...' },
               { loc: next(1), note: 'Authorization code from above' },
-              { loc: next(1), note: 'OAuth2 Token endpoint' },
-              { loc: next(4, 1), title: 'OAuth 2.0 Token Reply' },
+//              { loc: next(1), note: 'OAuth2 Token endpoint' },
+              { loc: next(4, 2), title: 'OAuth 2.0 Token Reply' },
               { loc: next(2, 2), note: 'Short lifetime token (here: one hour)' },
               { loc: next(1), note: 'One time password for refreshing the access token' },
               { loc: next(4, 2), title: 'Authorized request' },
@@ -287,7 +287,7 @@ export default class Presentation extends React.Component {
               </ListItem>
               <Appear>
                 <ListItem textColor="white">
-                  Circle CI redirects the user to the <strong>oauth2 authorize url</strong>,<br />
+                  To get access to user data, Circle CI redirects the user to the <strong>OAuth2 authorize endpoint</strong>,
                   and specifies what access privileges are required.
                 </ListItem>
               </Appear>
@@ -310,7 +310,7 @@ export default class Presentation extends React.Component {
               </Appear>
               <Appear>
                 <ListItem textColor="white">
-                  Circle CI exchanges the authorization code for an <strong>access token</strong>.
+                  Circle CI exchanges the authorization code for an <strong>access token</strong> at the <strong>OAuth2 token endpoint</strong>.
                 </ListItem>
               </Appear>
               <Appear>
@@ -329,7 +329,8 @@ export default class Presentation extends React.Component {
               application to obtain limited access to an HTTP service, either on
               behalf of a resource owner by orchestrating an approval interaction
               between the resource owner and the HTTP service, or by allowing the
-              third-party application to obtain access on its own behalf.
+              third-party application to obtain access on its own behalf.<br /><br />
+              <em>IETF RFC 6749: The OAuth 2.0 Authorization Framework</em>
             </BlockQuote>
           </Slide>
 
@@ -534,7 +535,7 @@ export default class Presentation extends React.Component {
               </Appear>
               <Appear>
                 <ListItem textColor="white">
-                  RSA 256 is used to sign cryptographic tokens
+                  RSA is used to sign cryptographic tokens
                 </ListItem>
               </Appear>
             </List>
@@ -546,7 +547,7 @@ export default class Presentation extends React.Component {
             code={require("raw!../assets/policy")}
             ranges={[
               { loc: start(0), title: 'ACCESS CONTROL POLICIES' },
-              { loc: next(2, 3), note: 'Make POST request (simplified)' },
+              { loc: next(2, 3), note: 'The warden endpoint is able to tell if a person is allowed to do something or not, based on policies that are stored in Hydra\'s database.' },
               { loc: next(1, 1), note: 'Who is making the request?' },
               { loc: next(1), note: 'What is the person trying to do?' },
               { loc: next(1), note: 'Who is impacted by the action?' },
@@ -568,7 +569,7 @@ export default class Presentation extends React.Component {
             <List>
               <Appear>
                 <ListItem textColor="white">
-                  General purpose store for cryptographic keys for encryption and signing.
+                  General purpose format for encryption and signing keys.
                 </ListItem>
               </Appear>
               <Appear>
